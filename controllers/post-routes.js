@@ -17,21 +17,26 @@ router.post("/", async (req, res) => {
 
 // To get all comments
 router.get("/", async (req, res) => {
-  Post.findAll({
-    order: [["created_at", "DESC"]],
-    include: [
-      {
-        model: User,
-        attributes: ["username"],
-      },
-      {
-        model: Comment,
-        attributes: ["body"],
-        include: {
-          model: User,
-          attributes: ["username"],
-        },
-      },
-    ],
-  });
+  try {
+    Post.findAll({
+        order: [["created_at", "DESC"]],
+        include: [
+          {
+            model: User,
+            attributes: ["username"],
+          },
+          {
+            model: Comment,
+            attributes: ["body"],
+            include: {
+              model: User,
+              attributes: ["username"],
+            },
+          },
+        ],
+      });
+  }catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
 });
